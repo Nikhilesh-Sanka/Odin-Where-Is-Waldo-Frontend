@@ -1,0 +1,30 @@
+.game-cards {
+  width: min(770px, calc(100% - 20px));
+  margin: 50px auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 10px;
+}
+.game-cards .game-card {
+  height: 250px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+}
+.game-cards .game-card:hover {
+  cursor: pointer;
+}
+.game-cards .game-card img {
+  height: 210px;
+  width: auto;
+  background-color: aqua;
+}
+.game-cards .game-card p {
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top: 1px solid black;
+}

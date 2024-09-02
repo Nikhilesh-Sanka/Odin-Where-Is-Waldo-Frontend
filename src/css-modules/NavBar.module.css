@@ -1,0 +1,75 @@
+@font-face {
+  font-family: "font-1";
+  src: url("./font-1.ttf");
+}
+
+.nav-bar {
+  background-color: #475569;
+  color: white;
+  display: flex;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.nav-bar h1 {
+  font-family: "font-1", sans-serif;
+  width: calc(100% - 45px);
+  text-align: center;
+}
+
+.nav-bar img {
+  width: 25px;
+  height: auto;
+}
+
+.nav-bar img.open {
+  border: 1px solid white;
+}
+
+.nav-bar img:hover {
+  cursor: pointer;
+}
+/* styling the dropdown menu */
+.nav-bar ul {
+  display: none;
+  transform-origin: 50% 0%;
+}
+.nav-bar ul.visible {
+  display: block;
+  animation: open-animation 0.3s ease-out;
+  list-style-type: none;
+  position: absolute;
+  top: 40px;
+  right: 20px;
+  background-color: black;
+  height: 100px;
+  padding: 10px;
+  border-radius: 10px;
+  font-family: sans-serif;
+  z-index: 4;
+}
+.nav-bar ul li {
+  margin-top: 10px;
+}
+.nav-bar ul li:hover {
+  cursor: pointer;
+}
+
+/* adding some responsiveness */
+@media (max-width: 330px) {
+  .nav-bar ul.visible {
+    top: 70px;
+  }
+}
+
+/* animations for the dropdown menu */
+@keyframes open-animation {
+  0% {
+    transform: scaleY(0);
+  }
+  100% {
+    transform: scaleY(1);
+  }
+}

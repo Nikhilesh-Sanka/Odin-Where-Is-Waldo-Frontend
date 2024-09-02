@@ -1,0 +1,143 @@
+/* styling the game instructions */
+.game-instructions {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  padding: 10px;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 3;
+}
+
+.game-instructions ul {
+  list-style-type: none;
+  display: flex;
+  justify-self: end;
+}
+.game-instructions ul li {
+  margin: 0 10px;
+  display: flex;
+  align-items: center;
+}
+.game-instructions ul li div {
+  display: inline-block;
+  height: 30px;
+  width: 30px;
+  overflow: hidden;
+  justify-self: start;
+  margin-right: 5px;
+  background-color: aqua;
+}
+.game-instructions ul li div img {
+  width: 100%;
+  height: 100%;
+}
+@media (max-width: 550px) {
+  .game-instructions {
+    display: block;
+  }
+  .game-instructions ul {
+    display: block;
+    margin-top: 20px;
+    margin-left: 30px;
+  }
+  .game-instructions ul li {
+    margin-top: 10px;
+    width: max-content;
+  }
+}
+
+/* game display styling */
+.game-display {
+  width: min(1000px, 100%);
+  margin: 0 auto;
+  background-color: gray;
+  position: relative;
+  img {
+    width: 100%;
+    height: auto;
+  }
+  /* styling the pointer */
+  .pointer {
+    display: none;
+    z-index: 2;
+  }
+  .pointer.visible {
+    display: flex;
+    position: absolute;
+  }
+  .pointer > div {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    background-color: rgb(0, 0, 0, 0.2);
+    border: 3px dotted white;
+  }
+  .pointer ul {
+    list-style-type: none;
+    background-color: white;
+    padding: 0 10px;
+    border: 1px solid black;
+    border-radius: 10px;
+    margin-left: 2px;
+  }
+  .pointer ul li {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+  }
+  .pointer ul li.hit {
+    text-decoration: line-through;
+  }
+  .pointer ul li:hover {
+    cursor: pointer;
+  }
+  .pointer ul li div {
+    width: 30px;
+    height: 30px;
+    overflow: hidden;
+    margin-right: 5px;
+  }
+  .pointer ul li div img {
+    width: 100%;
+    height: auto;
+  }
+}
+
+/* styling the popup */
+.popup {
+  width: 250px;
+  height: 200px;
+  background-color: white;
+  border-radius: 10px;
+  padding: 10px;
+  z-index: 6;
+  position: fixed;
+  top: calc(50vh - 100px);
+  left: calc(50vw - 125px);
+}
+.popup h2 {
+  text-align: center;
+  margin: 40px auto;
+  font-weight: 500;
+}
+.popup button {
+  display: block;
+  margin: 0 auto;
+  border: none;
+  border-radius: 10px;
+  background-color: black;
+  color: white;
+  width: 80px;
+  height: 30px;
+}
+
+.blur {
+  height: 100vh;
+  width: 100vw;
+  background-color: rgb(0, 0, 0, 0.3);
+  z-index: 5;
+  position: fixed;
+  top: 0;
+}
