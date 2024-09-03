@@ -25,7 +25,10 @@ export default function GameCards(props) {
           return (
             <div
               className={`${GameCardsStyles["game-card"]} ${GameCardsStyles["being-viewed"]}`}
-              onClick={() => handleCardClick(game.id)}
+              onClick={() => {
+                handleCardClick(game.id);
+                props.setGamePressed(true);
+              }}
             >
               <img src={game["image_url"]} />
               <p>{game.name}</p>

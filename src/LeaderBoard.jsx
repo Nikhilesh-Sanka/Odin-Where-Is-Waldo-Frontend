@@ -8,6 +8,7 @@ export default function LeaderBoard() {
   const [previewDetails, setPreviewDetails] = useState(null);
   const [tableBeingViewed, setTableBeingViewed] = useState(null);
   const [gameBeingViewed, setGameBeingViewed] = useState(null);
+  const [gamePressed, setGamePressed] = useState(false);
   useEffect(() => {
     fetch(`${serverUrl}/previewDetails`, {
       method: "GET",
@@ -27,11 +28,16 @@ export default function LeaderBoard() {
           gameBeingViewed={gameBeingViewed}
           setGameBeingViewed={setGameBeingViewed}
           setTableBeingViewed={setTableBeingViewed}
+          setGamePressed={setGamePressed}
         />
       ) : (
         <Loading />
       )}
-      {tableBeingViewed ? <Table tableBeingViewed={tableBeingViewed} /> : null}
+      {tableBeingViewed ? (
+        <Table tableBeingViewed={tableBeingViewed} />
+      ) : gamePressed ? (
+        <Loading />
+      ) : null}
     </div>
   );
 }

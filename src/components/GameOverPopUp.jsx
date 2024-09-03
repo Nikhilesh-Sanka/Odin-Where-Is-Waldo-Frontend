@@ -1,13 +1,14 @@
 import GameOverPopUpStyles from "../css-modules/GameOverPopUp.module.css";
-import { useRef } from "react";
+import Loading from "./Loading.jsx";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { serverUrl } from "../config.js";
 
 export default function GameOverPopUp(props) {
   const nameField = useRef(null);
   const navigate = useNavigate();
-  function handleSubmit(e) {
-    e.preventDefault();
+  const [continuePressed, setContinuePressed] = useState(false);
+  function handleSubmit() {
     if (nameField.current.value.trim() === "") {
       nameField.current.setCustomValidity("name cannot be empty");
       nameField.current.reportValidity();
@@ -38,7 +39,19 @@ export default function GameOverPopUp(props) {
             <input name="username" ref={nameField} />
           </label>
           <p>(please enter your name to get placed on the leader board)</p>
-          <button onClick={handleSubmit}>Continue</button>
+          {continuePressed ? (
+            <Loading />
+          ) : (
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                handleSubmit();
+                setContinuePressed(true);
+              }}
+            >
+              Continue
+            </button>
+          )}
         </form>
       </div>
       <div className={GameOverPopUpStyles["blur"]}></div>
