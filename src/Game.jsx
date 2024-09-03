@@ -168,7 +168,7 @@ function GameDisplay(props) {
                 props.setGameStatus("over");
               }
               props.setTargetHitStatus("it's a hit");
-            } else {
+            } else if (response.status === 202) {
               props.setTargetHitStatus("it's a miss");
             }
           });
