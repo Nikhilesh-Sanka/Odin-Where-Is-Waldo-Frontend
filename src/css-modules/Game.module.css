@@ -20,6 +20,9 @@
   display: flex;
   align-items: center;
 }
+.game-instructions ul li.hit {
+  text-decoration: line-through;
+}
 .game-instructions ul li div {
   display: inline-block;
   height: 30px;
@@ -140,4 +143,15 @@
   z-index: 5;
   position: fixed;
   top: 0;
+}
+
+/*styling the marker*/
+.marker {
+  width: 30px;
+  z-index: 2;
+  position: absolute;
+}
+.marker img {
+  width: 30px;
+  height: auto;
 }

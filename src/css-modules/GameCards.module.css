@@ -28,3 +28,6 @@
   align-items: center;
   border-top: 1px solid black;
 }
+.game-card.being-viewed {
+  border: 5px solid green;
+}

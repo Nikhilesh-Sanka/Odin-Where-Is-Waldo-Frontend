@@ -1,0 +1,46 @@
+.game-over-pop-up {
+  background-color: white;
+  width: 250px;
+  height: 200px;
+  border-radius: 10px;
+  padding: 10px;
+  position: fixed;
+  top: calc(50vh - 100px);
+  left: calc(50vw - 125px);
+  z-index: 5;
+}
+.game-over-pop-up form > p:first-of-type {
+  font-weight: 650;
+  text-align: center;
+  margin: 10px 0;
+}
+.game-over-pop-up form label {
+  display: block;
+}
+.game-over-pop-up form label input {
+  width: 100%;
+  height: 25px;
+}
+.game-over-pop-up form > p:last-of-type {
+  font-size: 0.8rem;
+  text-align: center;
+  margin: 5px 0 20px 0;
+}
+.game-over-pop-up form button {
+  width: 75px;
+  height: 30px;
+  background-color: black;
+  color: white;
+  border-radius: 10px;
+  border: none;
+  display: block;
+  margin: 0 auto;
+}
+.blur {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  z-index: 4;
+}

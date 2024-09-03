@@ -1,42 +1,47 @@
 import GameCardsStyles from "../css-modules/GameCards.module.css";
 import { useNavigate } from "react-router-dom";
+import { serverUrl } from "../config.js";
 
-export default function GameCards() {
+export default function GameCards(props) {
   const navigate = useNavigate();
-  function openGame(id) {
-    navigate(`/${id}`);
+  function handleCardClick(id) {
+    if (props.mode === "games") {
+      navigate(`/${id}`);
+    } else if (props.mode === "leader-board") {
+      fetch(`${serverUrl}/leaderBoard?gameId=${id}`, {
+        method: "GET",
+      })
+        .then((response) => response.json())
+        .then((response) => {
+          props.setTableBeingViewed(response);
+          props.setGameBeingViewed(id);
+        });
+    }
   }
   return (
     <div className={GameCardsStyles["game-cards"]}>
-      <div
-        className={GameCardsStyles["game-card"]}
-        onClick={() => {
-          openGame(1);
-        }}
-      >
-        <img />
-        <p>This is Game 1</p>
-      </div>
-      <div className={GameCardsStyles["game-card"]}>
-        <img />
-        <p>This is Game 1</p>
-      </div>
-      <div className={GameCardsStyles["game-card"]}>
-        <img />
-        <p>This is Game 1</p>
-      </div>
-      <div className={GameCardsStyles["game-card"]}>
-        <img />
-        <p>This is Game 1</p>
-      </div>
-      <div className={GameCardsStyles["game-card"]}>
-        <img />
-        <p>This is Game 1</p>
-      </div>
-      <div className={GameCardsStyles["game-card"]}>
-        <img />
-        <p>This is Game 1</p>
-      </div>
+      {props.previewDetails.map((game) => {
+        if (game.id === props.gameBeingViewed) {
+          return (
+            <div
+              className={`${GameCardsStyles["game-card"]} ${GameCardsStyles["being-viewed"]}`}
+              onClick={() => handleCardClick(game.id)}
+            >
+              <img src={game["image_url"]} />
+              <p>{game.name}</p>
+            </div>
+          );
+        }
+        return (
+          <div
+            className={GameCardsStyles["game-card"]}
+            onClick={() => handleCardClick(game.id)}
+          >
+            <img src={game["image_url"]} />
+            <p>{game.name}</p>
+          </div>
+        );
+      })}
     </div>
   );
 }

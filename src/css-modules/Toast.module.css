@@ -1,0 +1,33 @@
+.toast {
+  position: fixed;
+  top: 100px;
+  left: calc(50% - 50px);
+  width: 100px;
+  height: 20px;
+  text-align: center;
+  border-radius: 6px;
+  z-index: 3;
+  color: white;
+}
+.visible {
+  animation: fade 2s linear;
+  display: none;
+}
+.hit {
+  background-color: green;
+}
+.miss {
+  background-color: red;
+}
+
+@keyframes fade {
+  0% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
