@@ -13,7 +13,6 @@ export default function App() {
       .then((response) => response.json())
       .then((response) => setPreviewDetails(response));
   }, []);
-  console.log(previewDetails);
   return (
     <div className="home-page">
       <NavBar />

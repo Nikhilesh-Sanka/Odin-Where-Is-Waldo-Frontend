@@ -15,7 +15,6 @@ export default function LeaderBoard() {
       .then((response) => response.json())
       .then((response) => setPreviewDetails(response));
   }, []);
-  console.log(tableBeingViewed);
   return (
     <div className="leader-board">
       <NavBar />
@@ -38,7 +37,6 @@ export default function LeaderBoard() {
 }
 
 function Table(props) {
-  console.log(props.tableBeingViewed);
   return (
     <div className="table">
       <div>
