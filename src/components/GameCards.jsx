@@ -16,6 +16,8 @@ export default function GameCards(props) {
           props.setTableBeingViewed(response);
           props.setGameBeingViewed(id);
         });
+      props.setTableBeingViewed(null);
+      props.setGamePressed(true);
     }
   }
   return (
@@ -27,7 +29,6 @@ export default function GameCards(props) {
               className={`${GameCardsStyles["game-card"]} ${GameCardsStyles["being-viewed"]}`}
               onClick={() => {
                 handleCardClick(game.id);
-                props.setGamePressed(true);
               }}
             >
               <img src={game["image_url"]} />
