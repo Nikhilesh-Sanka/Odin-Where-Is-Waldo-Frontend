@@ -74,6 +74,7 @@ export default function Game() {
             instructions={gameDetails.instructions}
             hitTargets={hitTargets}
           />
+          <h2>fuck you bitch</h2>
           <GameDisplay
             gameDetails={gameDetails}
             gameInfoId={gameInfoId}
