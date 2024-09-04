@@ -1,3 +1,4 @@
+import Loading from "./Loading.jsx";
 import ToastStyles from "../css-modules/Toast.module.css";
 import { useRef, useEffect } from "react";
 
@@ -16,11 +17,17 @@ export default function Toast(props) {
       className={`${ToastStyles["toast"]} ${
         props.targetHitStatus === "it's a hit"
           ? ToastStyles["hit"]
+          : props.targetHitStatus === "getting-result"
+          ? ToastStyles["loading"]
           : ToastStyles["miss"]
       }`}
       ref={toast}
     >
-      {props.targetHitStatus}
+      {props.targetHitStatus === "getting-result" ? (
+        <Loading />
+      ) : (
+        props.targetHitStatus
+      )}
     </div>
   );
 }

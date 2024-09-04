@@ -74,7 +74,6 @@ export default function Game() {
             instructions={gameDetails.instructions}
             hitTargets={hitTargets}
           />
-          <h2>fuck you bitch</h2>
           <GameDisplay
             gameDetails={gameDetails}
             gameInfoId={gameInfoId}
@@ -145,6 +144,7 @@ function GameDisplay(props) {
   // it handles hit request from the player
   function handleHit(e) {
     e.stopPropagation();
+    props.setTargetHitStatus("getting-result");
     handleTargetHit(
       parseInt(e.currentTarget.id),
       pointer,

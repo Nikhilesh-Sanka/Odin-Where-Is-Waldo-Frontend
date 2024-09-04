@@ -8,16 +8,15 @@ export default function GameCards(props) {
     if (props.mode === "games") {
       navigate(`/${id}`);
     } else if (props.mode === "leader-board") {
+      props.setGameBeingViewed(id);
+      props.setTableBeingViewed(null);
       fetch(`${serverUrl}/leaderBoard?gameId=${id}`, {
         method: "GET",
       })
         .then((response) => response.json())
         .then((response) => {
           props.setTableBeingViewed(response);
-          props.setGameBeingViewed(id);
         });
-      props.setTableBeingViewed(null);
-      props.setGamePressed(true);
     }
   }
   return (

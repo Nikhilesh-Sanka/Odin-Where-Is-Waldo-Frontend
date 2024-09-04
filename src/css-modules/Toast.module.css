@@ -19,6 +19,14 @@
 .miss {
   background-color: red;
 }
+.loading.toast {
+  background-color: white;
+  height: 60px;
+  width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 @keyframes fade {
   0% {
