@@ -1,22 +1,35 @@
+// importing the components
 import NavBar from "./components/NavBar.jsx";
 import Loading from "./components/Loading.jsx";
 import GameOverPopUp from "./components/GameOverPopUp.jsx";
 import Toast from "./components/Toast.jsx";
+
+//importing the helper functions
+import handleTargetHit from "./helper-functions/handleTargetHit.js";
+
+// importing the configuration file
 import { serverUrl } from "./config.js";
+
+// importing the styles
 import GameStyles from "./css-modules/Game.module.css";
+
+// importing react hooks
 import { useRef, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 export default function Game() {
-  const [startTime, setStartTime] = useState(null);
   const [time, setTime] = useState(0);
+  const [startTime, setStartTime] = useState(null);
   const [gameDetails, setGameDetails] = useState(null);
   const [gameInfoId, setGameInfoId] = useState(null);
-  const [gameStatus, setGameStatus] = useState("going");
-  const [targetHitStatus, setTargetHitStatus] = useState(null);
-  const [hitTargets, setHitTargets] = useState([]);
-  const [hitCoordinates, setHitCoordinates] = useState([]);
+  const [targetHitStatus, setTargetHitStatus] = useState(null); // weather the hit was a miss or not
+  const [hitTargets, setHitTargets] = useState([]); // it's a 2d array containing the
   const { gameId } = useParams();
+
+  // setting game status
+  const gameStatus = hitTargets.length < 3 ? "going" : "over";
+
+  // fetching the game details and starting the timer
   useEffect(() => {
     if (!gameDetails) {
       fetch(`${serverUrl}/game?gameId=${gameId}`)
@@ -33,6 +46,8 @@ export default function Game() {
       };
     }
   }, [time, startTime]);
+
+  //function to handle the start of the game
   function startGame(e) {
     fetch(`${serverUrl}/startGame`, {
       method: "POST",
@@ -64,10 +79,7 @@ export default function Game() {
             gameInfoId={gameInfoId}
             setHitTargets={setHitTargets}
             hitTargets={hitTargets}
-            setGameStatus={setGameStatus}
             setTargetHitStatus={setTargetHitStatus}
-            hitCoordinates={hitCoordinates}
-            setHitCoordinates={setHitCoordinates}
           />
           {startTime ? null : <PopupBox startGame={startGame} />}
           {gameStatus === "over" ? (
@@ -87,6 +99,7 @@ export default function Game() {
   );
 }
 
+// The bar indicating the targets for players and the time elapsed
 function GameInstructions(props) {
   return (
     <div className={GameStyles["game-instructions"]}>
@@ -94,7 +107,9 @@ function GameInstructions(props) {
       <ul>
         {props.instructions.map((instruction) => {
           if (
-            props.hitTargets.some((hitTarget) => hitTarget === instruction.id)
+            props.hitTargets.some(
+              (hitTarget) => hitTarget[0] === instruction.id
+            )
           ) {
             return (
               <li className={GameStyles["hit"]} key={instruction.id}>
@@ -119,58 +134,36 @@ function GameInstructions(props) {
   );
 }
 
+// Main display of the Game
 function GameDisplay(props) {
   const pointer = useRef(null);
   const display = useRef(null);
   const selectionMenu = useRef(null);
   const [pointerCoordinates, setPointerCoordinates] = useState(null);
-  function handleTargetHit(e) {
+
+  // it handles hit request from the player
+  function handleHit(e) {
     e.stopPropagation();
-    console.log("click is listened");
-    pointer.current.classList.remove(GameStyles["visible"]);
-    const instructionId = parseInt(e.currentTarget.id);
-    const gameInfoId = props.gameInfoId;
-    const hitCoordinates = pointerCoordinates;
-    console.log(instructionId, gameInfoId, hitCoordinates);
-    if (props.hitTargets.some((hitTarget) => hitTarget === instructionId)) {
+    handleTargetHit(
+      parseInt(e.currentTarget.id),
+      pointer,
+      pointerCoordinates,
+      props.gameInfoId,
+      props.hitTargets,
+      props.setHitTargets,
+      props.setTargetHitStatus
+    );
+  }
+
+  // it handles the actions of the pointer when the game display is clicked
+  function handleClick(e) {
+    console.log("game clicked");
+    if (e.target.id === "marker") {
       return;
     }
-    fetch(`${serverUrl}/hitTarget`, {
-      method: "POST",
-      body: JSON.stringify({
-        instructionId,
-        hitCoordinates,
-        gameInfoId,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then((response) => {
-      console.log(response.status);
-      if (response.status === 200) {
-        props.setHitTargets((hitTargets) => {
-          return [...hitTargets, instructionId];
-        });
-        props.setHitCoordinates([...props.hitCoordinates, hitCoordinates]);
-        if (props.hitTargets.length === 2) {
-          props.setGameStatus("over");
-        }
-        props.setTargetHitStatus("it's a hit");
-      } else if (response.status === 202) {
-        props.setTargetHitStatus("it's a miss");
-      }
-    });
-  }
-  function handleClick(e) {
     if (pointer.current.classList.contains(GameStyles["visible"])) {
-      pointer.current.childNodes[1].childNodes.forEach((childNode) => {
-        childNode.removeEventListener("click", handleTargetHit, true);
-      });
       pointer.current.classList.remove(GameStyles["visible"]);
     } else {
-      if (e.target.id === "marker") {
-        return;
-      }
       let x = e.clientX - display.current.getBoundingClientRect().left;
       let y = e.clientY - display.current.getBoundingClientRect().top;
       const relativeCoordinates = getRelativeCoordinates(x, y);
@@ -180,6 +173,8 @@ function GameDisplay(props) {
       setPointerCoordinates(relativeCoordinates);
     }
   }
+
+  // it gets the relative coordinates of the cursor with respect to the game display in percentage
   function getRelativeCoordinates(x, y) {
     const displayRect = display.current.getBoundingClientRect();
     let xRelative = (x / displayRect.width) * 100;
@@ -192,14 +187,17 @@ function GameDisplay(props) {
       ref={display}
       onClick={handleClick}
     >
+      {/*Game Image*/}
       <img src={props.gameDetails["image_url"]} />
+
+      {/* pointer */}
       <div className={GameStyles["pointer"]} ref={pointer}>
         <div></div>
         <ul ref={selectionMenu}>
           {props.gameDetails.instructions
             .filter((instruction) =>
               props.hitTargets.every(
-                (hitTarget) => hitTarget !== instruction.id
+                (hitTarget) => hitTarget[0] !== instruction.id
               )
             )
             .map((instruction) => {
@@ -207,7 +205,7 @@ function GameDisplay(props) {
                 <li
                   id={instruction.id}
                   key={instruction.id}
-                  onClick={handleTargetHit}
+                  onClick={handleHit}
                 >
                   <div>
                     <img src={instruction["image_url"]} />
@@ -218,14 +216,18 @@ function GameDisplay(props) {
             })}
         </ul>
       </div>
-      {props.hitCoordinates.map((hitCoordinate, index) => {
+
+      {/* Marker */}
+      {props.hitTargets.map((hitTarget, index) => {
         return (
-          <Marker coordinates={hitCoordinate} key={index} display={display} />
+          <Marker coordinates={hitTarget[1]} key={index} display={display} />
         );
       })}
     </div>
   );
 }
+
+// Popup box that shows up at the start of the game
 function PopupBox(props) {
   const [continuePressed, setContinuePressed] = useState(null);
   return (
@@ -250,7 +252,7 @@ function PopupBox(props) {
   );
 }
 
-// marker
+// Marker for selected elements
 function Marker({ coordinates, display }) {
   const marker = useRef(null);
   function placeMarker() {
